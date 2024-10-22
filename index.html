@@ -74,6 +74,13 @@ See also:
 <li><a href="https://lockhartlab.org/sw">Smith-Waterman for simple scoring functions</a></li>
 <li><a href="https://lockhartlab.org/sw_submat">Smith-Waterman with substitution matrices</a></li>
 </ul>
+Algorithm:
+<ol>
+<li>Create a table, and write one sequence along the column and another along the rows with one extra row or column at the beginning</li>
+<li>Initialize the first row or column with increasing gap penalities</li>
+<li>Begin scoring. You can score any cell if the cells diagonal, upper, and left of it have values. You evaluate three scores: (i) The diagonal score plus the match/mismatch score, (ii) the upper score plus the gap penalty, and (iii) the left score plus the gap penalty. You take whichever score is greatest, and make a note if that score came from the diagonal, upper, or left cell.</li>
+<li>Perform traceback. Start from the bottom right cell, and work your way backward following the indications where the scores came from. A diagonal move indicates that you accept the letter in the two sequences, a vertical move indicates that you insert a gap into the sequence along the columns and take the letter from the sequence along the rows, and a horizontal move indicates that you insert a gap into the sequence along the rows and take the letter from the sequence along the columns.</li>
+</ol>
 </p>
 <table>
 <tr>
