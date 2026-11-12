@@ -263,6 +263,10 @@ $(function () {
         var data = $(this).data();
         $('#seq_1').val(data.seq1);
         $('#seq_2').val(data.seq2);
+        if (data.match === undefined) {
+            updateInputs();
+            return;
+        }
         activeScoring = Object.assign({}, AlignmentEngine.defaults, {
             match: Number(data.match), mismatch: Number(data.mismatch), gap: Number(data.gap)
         });
