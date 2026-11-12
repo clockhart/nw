@@ -23,6 +23,14 @@ If more than one complete optimal alignment exists, the Alignment header shows *
 
 Opposite gap directions may occur consecutively; changing direction starts a new gap. This preserves the original linear Needleman–Wunsch behavior when affine creation and extension scores are equal. Floating-point tie comparisons use a tolerance of `1e-9`. Computing and rendering the full grid grows with the product of the sequence lengths.
 
+## Alignment movie
+
+**Movie** plays a guided animation for the current sequences and scoring function. It initializes the origin, top row, and left column, fills the interior row by row, then traces the selected optimal alignment from the bottom-right cell to the origin. Every step explains the relevant scores and highlights the current cell and its sources. Affine lessons distinguish gap creation from extension and retain the selected traceback's state history. The alignment appears one column at a time during traceback.
+
+Pause, step backward or forward, restart, or seek with the progress slider. Speed ranges from `0.25×` to `16×` and can change during playback. The matrix scrolls to follow the current cell. Closing the movie restores the previous path, selected alternative, and matrix/alignment scroll positions; sequence or scoring changes exit playback and show the updated complete matrix. Playback works with both gap models and every bundled substitution matrix, with no separate sequence-length limit.
+
+Lessons are generated on demand from the existing alignment engine rather than storing a frame for every cell. The underlying full-grid computation and rendering still grow with the product of the sequence lengths.
+
 ## Substitution matrix data
 
 The following standard tables are bundled in [SubstitutionMatrices.js](SubstitutionMatrices.js), with the source headers retained as metadata:
@@ -34,7 +42,9 @@ These files come from the official Biopython repository. Its source license is i
 
 ## Verification
 
-Run `node --test tests/alignment-engine.test.js`.
+Run `node --test tests/*.test.js`.
 
 The tests compare scores, counts, and every optimal traceback against direct exhaustive enumeration for short sequences under simple, affine, matrix, fractional, zero, and positive gap scores. They also check large exact counts, direct alignment selection, matrix orientation, and invalid alphabets. Browser verification covers live input validation, all scoring combinations, alternate navigation, manual paths, scrolling, hover explanations, and phone layouts.
+
+Movie tests verify that each cell appears after its dependencies, boundary explanations follow the chosen gap model, and every traceback frame reconciles its remaining prefix and aligned suffix scores. They also cover ties, matrix scoring, alternate tracebacks, and direct seeking through large matrices. Browser checks cover play/pause timing, speed changes, reverse steps, seeking, partial affine alignments, cleanup on edits, workspace restoration, and desktop/phone layouts.
 
